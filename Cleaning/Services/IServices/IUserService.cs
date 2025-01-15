@@ -6,5 +6,6 @@ namespace Cleaning.Services.IServices
     {
         public List<ApplicationUser> GetClientList();
         public List<ApplicationUser> GetEmployeeList();
+        public bool AddEmployee(ApplicationUser employee);
     }
 }

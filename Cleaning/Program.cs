@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Cleaning.Data;
 using Cleaning.Entities;
 using Cleaning.Seed;
+using Cleaning.Repositories.IRepositories;
+using Cleaning.Repositories;
+using Cleaning.Services;
+using Cleaning.Services.IServices;
 namespace Cleaning
 {
     public class Program
@@ -15,11 +19,16 @@ namespace Cleaning
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddDefaultIdentity<ApplicationUser>().AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>(); //identity ++
-            builder.Services.AddRazorPages(); //identity, use razor pages
+            //builder.Services.AddRazorPages().AddRazorPagesOptions(options => {
+            //    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
+            //}); //identity, use razor pages
+            //https://stackoverflow.com/questions/46117717/how-to-change-starting-page-using-razor-pages-in-net-core-2
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-           
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -44,7 +53,11 @@ namespace Cleaning
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.MapRazorPages(); //добавя връзката със страниците
+            app.MapRazorPages(); //добавя поддръжка на razor страниците
+
+            app.MapControllerRoute(
+                name: "area",
+                pattern: "{area}/{controller}/{action}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",

@@ -69,8 +69,7 @@ namespace Cleaning.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            public string UserName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -115,15 +114,15 @@ namespace Cleaning.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
 
-                    var user = await _userManager.FindByNameAsync(Input.Email);
+                    var user = await _userManager.FindByNameAsync(Input.UserName);
                     if (await _userManager.IsInRoleAsync(user, StaticData.Role_Admin))
                     {
-                        return RedirectToAction("Index", "User", new { area = "Admin" });
+                        return RedirectToAction("Index", "Employee", new { area = "Admin" });
                     }
                     else if (await _userManager.IsInRoleAsync(user, StaticData.Role_Client))
                     {

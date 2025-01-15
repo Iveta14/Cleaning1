@@ -25,5 +25,26 @@ namespace Cleaning.Repositories
 
             return result;
         }
+
+        public bool Add(ApplicationUser user)
+        {
+            try
+            {
+                _context.ApplicationUsers.Add(user);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public ApplicationUser? FindByUserName(string? userName)
+        {
+            if (String.IsNullOrEmpty(userName))
+                return null;
+            return _context.ApplicationUsers.Where(s => s.UserName == userName).FirstOrDefault();
+        }
     }
 }
