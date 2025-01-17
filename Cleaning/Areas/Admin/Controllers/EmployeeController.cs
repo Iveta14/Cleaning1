@@ -4,6 +4,7 @@ using Cleaning.Helpers;
 using Cleaning.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Cleaning.Areas.Admin.Controllers
 {
@@ -32,8 +33,6 @@ namespace Cleaning.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(EmployeeViewModel viewModel)
         {
-            _userService.SetModelStateDictionary(new ModelStateWrapper(ModelState));
-
             ApplicationUser employee = new ApplicationUser();
             viewModel.PopulateEmployee(employee);
             if (_userService.AddEmployee(employee))

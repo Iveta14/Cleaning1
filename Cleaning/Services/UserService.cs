@@ -16,6 +16,11 @@ namespace Cleaning.Services
             _repository = repository;
         }
 
+        public void SetModelStateDictionary(IValidationDictionary modelState)
+        {
+            _modelState = modelState;
+        }
+
         public List<ApplicationUser> GetClientList()
         {
             return _repository.GetUserListWithRole(StaticData.Role_Client);
@@ -55,5 +60,7 @@ namespace Cleaning.Services
                 return false;
             }
         }
+
+
     }
 }

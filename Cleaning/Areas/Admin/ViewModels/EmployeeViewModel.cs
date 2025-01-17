@@ -49,5 +49,3 @@ namespace Cleaning.Areas.Admin.ViewModels
         }
     }
 }
-    }
-}
