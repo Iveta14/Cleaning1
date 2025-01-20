@@ -9,7 +9,7 @@
         public string ThumbnailImagePath { get; set; }
         public string PhotoBeforePath { get; set; }
         public string PhotoAfterPath { get; set; }
-        public List<OrderService> OrderServices { get; } = [];
-        public List<Order> Orders { get; } = [];
+        public ICollection<OrderService> OrderServices { get; } = [];
+        //public ICollection<Order> Orders { get; } = [];
     }
 }

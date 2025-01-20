@@ -15,6 +15,12 @@ namespace Cleaning.Data
 
         }
 
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderService> OrdersServices { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -27,6 +33,7 @@ namespace Cleaning.Data
                     .HasForeignKey(ur => ur.UserId)
                     .IsRequired();
             });
+
             modelBuilder.Entity<ApplicationRole>(b =>
             {
                 // Each Role can have many entries in the UserRole join table
@@ -35,17 +42,24 @@ namespace Cleaning.Data
                     .HasForeignKey(ur => ur.RoleId)
                     .IsRequired();
             });
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(user => user.ClientOrders)
+                .WithOne(order => order.Client)
+                .HasForeignKey(order => order.ClientId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(user => user.EmployeeOrders)
+                .WithOne(order => order.Employee)
+                .HasForeignKey(order => order.EmployeeId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<OrderService>().HasKey(u => new
             {
                 u.ServiceId,
                 u.OrderId
             });
         }
-
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet<ApplicationRole> ApplicationRoles { get; set; }
-        public DbSet<Service> Services { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderService> OrdersServices { get; set; }
     }
 }
