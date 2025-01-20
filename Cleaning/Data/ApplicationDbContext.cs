@@ -35,9 +35,17 @@ namespace Cleaning.Data
                     .HasForeignKey(ur => ur.RoleId)
                     .IsRequired();
             });
+            modelBuilder.Entity<OrderService>().HasKey(u => new
+            {
+                u.ServiceId,
+                u.OrderId
+            });
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderService> OrdersServices { get; set; }
     }
 }

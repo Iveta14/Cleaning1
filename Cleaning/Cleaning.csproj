@@ -19,4 +19,15 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Client\Controllers\" />
+    <Folder Include="Areas\Client\Data\" />
+    <Folder Include="Areas\Client\Models\" />
+    <Folder Include="Areas\Client\Views\" />
+    <Folder Include="Areas\Employee\Controllers\" />
+    <Folder Include="Areas\Employee\Data\" />
+    <Folder Include="Areas\Employee\Models\" />
+    <Folder Include="Areas\Employee\Views\" />
+  </ItemGroup>
+
 </Project>
