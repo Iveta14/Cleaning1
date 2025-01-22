@@ -14,6 +14,14 @@ namespace Cleaning.Seed
             {
                 roleManager.CreateAsync(new ApplicationRole(StaticData.Role_Admin)).GetAwaiter().GetResult();
             }
+            if (!roleManager.RoleExistsAsync(StaticData.Role_Employee).GetAwaiter().GetResult())
+            {
+                roleManager.CreateAsync(new ApplicationRole(StaticData.Role_Employee)).GetAwaiter().GetResult();
+            }
+            if (!roleManager.RoleExistsAsync(StaticData.Role_Client).GetAwaiter().GetResult())
+            {
+                roleManager.CreateAsync(new ApplicationRole(StaticData.Role_Client)).GetAwaiter().GetResult();
+            }
         }
     }
 }

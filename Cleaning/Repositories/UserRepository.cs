@@ -15,12 +15,14 @@ namespace Cleaning.Repositories
             _context = context;
         }
 
-        public List<ApplicationUser> GetUserListWithRole(string role)
+        public List<ApplicationUser> GetUserListWithRole(string roleName)
         {
+            var role = _context.Roles.Where(s => s.Name == roleName).FirstOrDefault();
+
             IQueryable<ApplicationUser> query = _context.Set<ApplicationUser>();
             query = query.Include(s => s.UserRoles).ThenInclude(s => s.Role);
            
-            query = query.Where(s => s.UserRoles.FirstOrDefault().RoleId == role);
+            query = query.Where(s => s.UserRoles.FirstOrDefault().RoleId == role.Id);
             List<ApplicationUser> result = query.ToList();
 
             return result;

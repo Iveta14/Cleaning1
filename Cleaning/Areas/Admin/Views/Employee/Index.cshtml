@@ -1,6 +1,9 @@
 ﻿@model List<ApplicationUser>
 
-<h1>Клиенти</h1>
+<h1>Служители</h1>
+<div class="col-12 d-flex justify-content-end">
+    <a asp-controller="Employee" asp-action="Create" class="btn btn-primary">Добави служител</a>
+</div>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -8,6 +11,7 @@
             <th>Име</th>
             <th>Фамилия</th>
             <th>Имейл</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -18,6 +22,15 @@
                 <td>@obj.FirstName</td>
                 <td>@obj.LastName</td>
                 <td>@obj.Email</td>
+                <td class="text-center">
+                    <form method="post" action="@Url.Action("Delete", "Employee")" onsubmit="return confirm('Наистина ли искате да изтриете служителя: @obj.UserName?');">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" value="@(obj.Id)" />
+                        <button type="submit" style="border: none; color:#0d6efd; background-color: transparent;" title="Изтриване">
+                            <i class="bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>

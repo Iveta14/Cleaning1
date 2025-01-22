@@ -33,6 +33,8 @@ namespace Cleaning.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(EmployeeViewModel viewModel)
         {
+            _userService.SetModelStateDictionary(ModelState);
+
             ApplicationUser employee = new ApplicationUser();
             viewModel.PopulateEmployee(employee);
             if (_userService.AddEmployee(employee))
@@ -46,6 +48,21 @@ namespace Cleaning.Areas.Admin.Controllers
             }
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(string id)
+        {
+            if (_userService.DeleteUser(id))
+            {
+                TempData["success"] = "Служителят е изтрит успешно!";
+            }
+            else
+            {
+                TempData["error"] = "Служителят не може да бъде изтрит!";
+            }
+            return RedirectToAction("Index");
         }
     }
 }

@@ -2,21 +2,26 @@
 using Cleaning.Helpers;
 using Cleaning.Repositories.IRepositories;
 using Cleaning.Services.IServices;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Data;
 using System.Text.RegularExpressions;
 
 namespace Cleaning.Services
 {
     public class UserService : IUserService
     {
-        private IValidationDictionary? _modelState;
         private IUserRepository _repository;
+        UserManager<ApplicationUser> _userManager;
+        private ModelStateDictionary _modelState;
 
-        public UserService(IUserRepository repository)
+        public UserService(IUserRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
+            _userManager = userManager;
         }
 
-        public void SetModelStateDictionary(IValidationDictionary modelState)
+        public void SetModelStateDictionary(ModelStateDictionary modelState)
         {
             _modelState = modelState;
         }
@@ -41,7 +46,7 @@ namespace Cleaning.Services
             if (employee1 != null)
             {
                 if (employee.Id != employee1.Id)
-                    _modelState.AddError("", $"Потребителят {employee1.UserName} вече съществува.");
+                    _modelState.AddModelError("", $"Потребителят {employee1.UserName} вече съществува.");
             }
 
             return _modelState.IsValid;
@@ -53,7 +58,9 @@ namespace Cleaning.Services
             {
                 if (!ValidateEmployee(employee))
                     return false;
-                return _repository.Add(employee);
+                var userResult = _userManager.CreateAsync(employee, employee.PasswordHash).GetAwaiter().GetResult();
+                var roleResult = _userManager.AddToRoleAsync(employee, StaticData.Role_Employee).GetAwaiter().GetResult();
+                return true;
             }
             catch
             {
@@ -61,6 +68,11 @@ namespace Cleaning.Services
             }
         }
 
-
+        public bool DeleteUser(string id)
+        {
+            ApplicationUser user = _userManager.FindByIdAsync(id).GetAwaiter().GetResult();
+            _userManager.DeleteAsync(user).GetAwaiter().GetResult();
+            return true;
+        }
     }
 }

@@ -23,16 +23,19 @@ namespace Cleaning.Areas.Admin.ViewModels
         [DisplayName("Имейл")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Полето \"Парола\" е задължително!")]
         [DisplayName("Парола")]
         public string Password { get; set; }
+
+        [DisplayName("Повтори паролата")]
+        public string ConfirmPassword { get; set; }
 
         public void PopulateEmployee(Entities.ApplicationUser employee)
         {
             employee.UserName = UserName;
             employee.FirstName = FirstName;
-            employee.FirstName = LastName;
+            employee.LastName = LastName;
             employee.Email = Email;
+            employee.PasswordHash = Password;
         }
 
         public void PopulateFromCategory(Entities.ApplicationUser? employee)
