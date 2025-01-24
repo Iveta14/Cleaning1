@@ -1,13 +1,15 @@
-﻿@model List<ApplicationUser>
+﻿@model List<Service>
 
-<h1>Клиенти</h1>
+<h1>Услуги</h1>
+<div class="col-12 d-flex justify-content-end">
+    <a asp-controller="Service" asp-action="Create" class="btn btn-primary">Добави услуга</a>
+</div>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>Потребителско име</th>
-            <th>Име</th>
-            <th>Фамилия</th>
-            <th>Имейл</th>
+            <th>Наименование</th>
+            <th>Описание</th>
+            <th>Цена на квадратен метър</th>
             <th></th>
         </tr>
     </thead>
@@ -15,12 +17,11 @@
         @foreach (var obj in Model)
         {
             <tr>
-                <td>@obj.UserName</td>
-                <td>@obj.FirstName</td>
-                <td>@obj.LastName</td>
-                <td>@obj.Email</td>
+                <td>@obj.Name</td>
+                <td>@obj.Description</td>
+                <td>@obj.Price</td>
                 <td class="text-center">
-                    <form method="post" action="@Url.Action("Delete", "Employee")" onsubmit="return confirm('Наистина ли искате да изтриете служителя: @obj.UserName?');">
+                    <form method="post" action="@Url.Action("Delete", "Employee")" onsubmit="return confirm('Наистина ли искате да изтриете услугата: @obj.Name?');">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="Id" value="@(obj.Id)" />
                         <button type="submit" style="border: none; color:#0d6efd; background-color: transparent;" title="Изтриване">

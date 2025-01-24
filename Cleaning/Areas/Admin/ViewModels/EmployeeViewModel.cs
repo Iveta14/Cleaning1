@@ -29,7 +29,7 @@ namespace Cleaning.Areas.Admin.ViewModels
         [DisplayName("Повтори паролата")]
         public string ConfirmPassword { get; set; }
 
-        public void PopulateEmployee(Entities.ApplicationUser employee)
+        public void PopulateEmployee(Entities.ApplicationUser employee) //за създаването на служител
         {
             employee.UserName = UserName;
             employee.FirstName = FirstName;
@@ -38,7 +38,7 @@ namespace Cleaning.Areas.Admin.ViewModels
             employee.PasswordHash = Password;
         }
 
-        public void PopulateFromCategory(Entities.ApplicationUser? employee)
+        public void PopulateFromEmployeeEntity(Entities.ApplicationUser? employee) //за редактирането на служител
         {
             if (employee == null)
                 return;
