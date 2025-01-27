@@ -40,6 +40,9 @@ namespace Cleaning
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
 
+            builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+            builder.Services.AddScoped<IServiceService, ServiceService>();
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

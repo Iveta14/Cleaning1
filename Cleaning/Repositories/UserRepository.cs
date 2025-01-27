@@ -1,6 +1,7 @@
 ﻿using Cleaning.Data;
 using Cleaning.Entities;
 using Cleaning.Repositories.IRepositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,7 @@ namespace Cleaning.Repositories
             IQueryable<ApplicationUser> query = _context.Set<ApplicationUser>();
             query = query.Include(s => s.UserRoles).ThenInclude(s => s.Role);
            
-            query = query.Where(s => s.UserRoles.FirstOrDefault().RoleId == role.Id);
+            query = query.Where(s => s.UserRoles.FirstOrDefault().RoleId == role.Id).Where(b => b.IsDeleted == false);
             List<ApplicationUser> result = query.ToList();
 
             return result;
@@ -47,6 +48,16 @@ namespace Cleaning.Repositories
             if (String.IsNullOrEmpty(userName))
                 return null;
             return _context.ApplicationUsers.Where(s => s.UserName == userName).FirstOrDefault();
+        }
+
+        public bool Delete(ApplicationUser user)
+        {
+            user.IsDeleted = true;
+
+            user.LockoutEnd = DateTime.Now.AddYears(1000);
+            _context.ApplicationUsers.Update(user);
+            int stateNumber = _context.SaveChanges();
+            return stateNumber > 0;
         }
     }
 }

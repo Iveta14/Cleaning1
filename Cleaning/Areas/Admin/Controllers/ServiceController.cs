@@ -41,12 +41,12 @@ namespace Cleaning.Areas.Admin.Controllers
             viewModel.PopulateServiceEntity(service);
             if (_serviceService.AddService(service))
             {
-                TempData["success"] = $"Служителят {employee.UserName} е добавен успешно!";
+                TempData["success"] = $"Услугатас {service.Name} е добавена успешно!";
                 return RedirectToAction("Index");
             }
             else if (ModelState.IsValid)
             {
-                TempData["error"] = "Служителят не може да бъде добавен!";
+                TempData["error"] = "Услугата не може да бъде добавена!";
             }
 
             return View(viewModel);

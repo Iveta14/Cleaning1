@@ -21,16 +21,22 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Views\Order\" />
-    <Folder Include="Areas\Client\Controllers\" />
     <Folder Include="Areas\Client\Data\" />
     <Folder Include="Areas\Client\Models\" />
-    <Folder Include="Areas\Client\Views\" />
+    <Folder Include="Areas\Client\Views\Order\" />
     <Folder Include="Areas\Employee\Controllers\" />
     <Folder Include="Areas\Employee\Data\" />
     <Folder Include="Areas\Employee\Models\" />
-    <Folder Include="Areas\Employee\Views\" />
+    <Folder Include="Areas\Employee\Views\Order\" />
     <Folder Include="Migrations\" />
     <Folder Include="Seed\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Admin\Views\Service\_Form.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

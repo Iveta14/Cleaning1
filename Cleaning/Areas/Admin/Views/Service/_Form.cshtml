@@ -1,0 +1,59 @@
+﻿@model ServiceViewModel
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        <div class="card mt-2">
+            <div class="card-header text-white bg-primary">
+                <h2>@(Model.Id != null ? $"Редактирай услуга: {Model.Name}" : "Добави услуга")</h2>
+            </div>
+            <div class="card-body">
+                <form asp-controller="Service" asp-action="@(Model.Id != null ? "Update" : "Create")" method="post">
+                    <input type="hidden" asp-for="Id" />
+                   
+                    <div asp-validation-summary="All"></div>
+
+                    <div class="row">
+                        <div class="row mb-3 p-1">
+                            <label asp-for="Name" class="p-0"></label>
+                            <input asp-for="Name" class="form-control" aria-required="true" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="row mb-3 p-1">
+                            <label asp-for="Description" class="p-0"></label>
+                            <input asp-for="Description" class="form-control" aria-required="true" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="row mb-3 p-1">
+                            <label asp-for="Price" class="p-0"></label>
+                            <input asp-for="Price" class="form-control" aria-required="true" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label asp-for="ThumbnailImagePath"></label>
+                        <input id="image-input" type="file" name="file" class="form-control border-0" style="padding-left:25px;" />
+                    </div>
+                    <div class="row">
+                        <label asp-for="PhotoBeforePath"></label>
+                        <input id="image-input" type="file" name="file" class="form-control border-0" style="padding-left:25px;" />
+                    </div>
+                    <div class="row">
+                        <label asp-for="PhotoAfterPath"></label>
+                        <input id="image-input" type="file" name="file" class="form-control border-0" style="padding-left:25px;" />
+                    </div>
+                    <div class="col-4">
+                        <img id="thumbnail-image" src="@Url.Content(String.IsNullOrEmpty(Model.ThumbnailImagePath) ? "~/" + StaticData.GetEmptyImagePath() : "~/" + Model.ThumbnailImagePath)" width="100%" style="border-radius: 5px; border:1px solid #bbb9b9;" />
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary form-control">@(Model.Id != null ? "Редактирай" : "Създай")</button>
+                        </div>
+                        <div class="col-4">
+                            <a asp-controller="Service" asp-action="Index" class="btn btn-outline-secondary form-control">Към служители</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

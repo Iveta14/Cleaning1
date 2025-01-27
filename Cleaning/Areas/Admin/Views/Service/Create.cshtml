@@ -1,0 +1,8 @@
+﻿@model ServiceViewModel
+@Html.Partial("_Form", Model)
+@* Sections do not work in partial views and that is by design. *@
+@section Scripts {
+    @{
+        <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    }
+}
