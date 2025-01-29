@@ -33,13 +33,18 @@ namespace Cleaning.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ServiceViewModel viewModel)
+        public IActionResult Create(
+            ServiceViewModel viewModel, 
+            IFormFile? thumbNailImage,
+            IFormFile? beforeServiceImage,
+            IFormFile? afterServiceImage
+        )
         {
             _serviceService.SetModelStateDictionary(ModelState);
 
             Service service = new Service();
             viewModel.PopulateServiceEntity(service);
-            if (_serviceService.AddService(service))
+            if (_serviceService.AddService(service, thumbNailImage, beforeServiceImage, afterServiceImage))
             {
                 TempData["success"] = $"Услугатас {service.Name} е добавена успешно!";
                 return RedirectToAction("Index");

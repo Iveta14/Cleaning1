@@ -5,6 +5,7 @@ using Cleaning.Services.IServices;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Cleaning.Services
 {
@@ -14,9 +15,10 @@ namespace Cleaning.Services
         private ModelStateDictionary _modelState;
         private IWebHostEnvironment _webHostEnvironment;
 
-        public ServiceService(IServiceRepository repository)
+        public ServiceService(IServiceRepository repository, IWebHostEnvironment webHostEnvironment)
         {
             _repository = repository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public void SetModelStateDictionary(ModelStateDictionary modelState)
@@ -29,7 +31,7 @@ namespace Cleaning.Services
             return _repository.GetServiceList();
         }
 
-        public bool ValidateService(Service service)
+        public bool ValidateServiceName(Service service)
         {
             if (_modelState == null)
                 throw new ArgumentNullException(nameof(_modelState));
@@ -44,52 +46,90 @@ namespace Cleaning.Services
             return _modelState.IsValid;
         }
 
-        public bool ValidateServiceOnCreate(Service service, IFormFile? file)
+        public bool RequiredFileValidation(IFormFile? file, string textMessage)
         {
             if (_modelState == null)
                 throw new ArgumentNullException(nameof(_modelState));
 
             if (file == null)
-                _modelState.AddModelError("", "Добавете снимка на услугата!");
+                _modelState.AddModelError("", textMessage);
+
+            return _modelState.IsValid;
+        }
+
+        public bool ValidateFileExt(IFormFile? file, string textMessage)
+        {
+            if (_modelState == null)
+                throw new ArgumentNullException(nameof(_modelState));
+
             if (file != null)
             {
                 string ext = System.IO.Path.GetExtension(file.FileName);
                 if (ext != ".jpg")
-                    _modelState.AddModelError("", "Невалиден файл! Допускат се файлове с разширение .jpg!");
+                    _modelState.AddModelError("", textMessage);
             }
             return _modelState.IsValid;
         }
 
-        public bool AddService(Service service, IFormFile? file)
+        public bool AddService(
+            Service service, 
+            IFormFile? thumbNailImage, 
+            IFormFile? beforeServiceImage, 
+            IFormFile? afterServiceImage
+        )
         {
             try
             {
-                string fileName = "";
-                string filePath = "";
+                string thumbNailFileName = "";
+                string thumbNailFilePath = "";
+
+                string beforeServiceFileName = "";
+                string beforeServiceFilePath = "";
+
+                string afterServiceFileName = "";
+                string afterServiceFilePath = "";
+
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 string productIamgeDirectory = StaticData.GetImagePathDir();
                 string fullPath = Path.Combine(wwwRootPath, productIamgeDirectory);
 
                 try
                 {
-                    if (!ValidateServiceOnCreate(service, file))
+                    if (!ValidateServiceName(service) &&
+                        !RequiredFileValidation(thumbNailImage, "Доба ви реалното съобщение!") &&
+                        !RequiredFileValidation(beforeServiceImage, "Доба ви реалното съобщение!") &&
+                        !RequiredFileValidation(afterServiceImage, "Доба ви реалното съобщение!") &&
+                        !ValidateFileExt(thumbNailImage, "Доба ви реалното съобщение!") &&
+                        !ValidateFileExt(beforeServiceImage, "Доба ви реалното съобщение!") &&
+                        !ValidateFileExt(afterServiceImage, "Доба ви реалното съобщение!"))
                         return false;
 
-                    fileName = Utils.SaveFormFile(file, fullPath);
-                    filePath = productIamgeDirectory + Path.DirectorySeparatorChar + fileName;
-                    service.ThumbnailImagePath = filePath;
+                    thumbNailFileName = Utils.SaveFormFile(thumbNailImage, fullPath);
+                    thumbNailFilePath = productIamgeDirectory + Path.DirectorySeparatorChar + thumbNailFileName;
+                    service.ThumbnailImagePath = thumbNailFilePath;
+
+                    beforeServiceFileName = Utils.SaveFormFile(beforeServiceImage, fullPath);
+                    beforeServiceFilePath = productIamgeDirectory + Path.DirectorySeparatorChar + beforeServiceFileName;
+                    service.ThumbnailImagePath = beforeServiceFilePath;
+
+                    afterServiceFileName = Utils.SaveFormFile(afterServiceImage, fullPath);
+                    afterServiceFilePath = productIamgeDirectory + Path.DirectorySeparatorChar + afterServiceFileName;
+                    service.ThumbnailImagePath = afterServiceFilePath;
 
                     if (!_repository.Add(service))
                     {
-                        Utils.DeleteFile(Path.Combine(wwwRootPath, filePath));
+                        Utils.DeleteFile(Path.Combine(wwwRootPath, thumbNailFilePath));
+                        Utils.DeleteFile(Path.Combine(wwwRootPath, beforeServiceFilePath));
+                        Utils.DeleteFile(Path.Combine(wwwRootPath, afterServiceFilePath));
                         return false;
                     }
                     return true;
                 }
                 catch
                 {
-                    if (!String.IsNullOrEmpty(fullPath))
-                        Utils.DeleteFile(Path.Combine(wwwRootPath, filePath));
+                    Utils.DeleteFile(Path.Combine(wwwRootPath, thumbNailFilePath));
+                    Utils.DeleteFile(Path.Combine(wwwRootPath, beforeServiceFilePath));
+                    Utils.DeleteFile(Path.Combine(wwwRootPath, afterServiceFilePath));
                     return false;
                 }
             }

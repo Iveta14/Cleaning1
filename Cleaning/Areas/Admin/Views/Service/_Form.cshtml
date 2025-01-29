@@ -7,7 +7,7 @@
                 <h2>@(Model.Id != null ? $"Редактирай услуга: {Model.Name}" : "Добави услуга")</h2>
             </div>
             <div class="card-body">
-                <form asp-controller="Service" asp-action="@(Model.Id != null ? "Update" : "Create")" method="post">
+                <form asp-controller="Service" asp-action="@(Model.Id != null ? "Update" : "Create")" method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="Id" />
                    
                     <div asp-validation-summary="All"></div>
@@ -31,15 +31,15 @@
                     </div>
                     <div class="row">
                         <label asp-for="ThumbnailImagePath"></label>
-                        <input id="image-input" type="file" name="file" class="form-control border-0" style="padding-left:25px;" />
+                        <input id="image-input" type="file" name="thumbNailImage" class="form-control border-0" style="padding-left:25px;" />
                     </div>
                     <div class="row">
                         <label asp-for="PhotoBeforePath"></label>
-                        <input id="image-input" type="file" name="file" class="form-control border-0" style="padding-left:25px;" />
+                        <input id="image-input" type="file" name="beforeServiceImage" class="form-control border-0" style="padding-left:25px;" />
                     </div>
                     <div class="row">
                         <label asp-for="PhotoAfterPath"></label>
-                        <input id="image-input" type="file" name="file" class="form-control border-0" style="padding-left:25px;" />
+                        <input id="image-input" type="file" name="afterServiceImage" class="form-control border-0" style="padding-left:25px;" />
                     </div>
                     <div class="col-4">
                         <img id="thumbnail-image" src="@Url.Content(String.IsNullOrEmpty(Model.ThumbnailImagePath) ? "~/" + StaticData.GetEmptyImagePath() : "~/" + Model.ThumbnailImagePath)" width="100%" style="border-radius: 5px; border:1px solid #bbb9b9;" />
