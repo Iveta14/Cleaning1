@@ -30,6 +30,7 @@
     <Folder Include="Areas\Employee\Views\Order\" />
     <Folder Include="Migrations\" />
     <Folder Include="Seed\images\" />
+    <Folder Include="wwwroot\files\images\" />
   </ItemGroup>
 
   <ItemGroup>

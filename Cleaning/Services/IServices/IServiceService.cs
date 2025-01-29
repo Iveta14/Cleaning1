@@ -7,6 +7,6 @@ namespace Cleaning.Services.IServices
     {
         public void SetModelStateDictionary(ModelStateDictionary modelState);
         public List<Service> GetServiceList();
-        public bool AddService(Service service);
+        public bool AddService(Service service, IFormFile? file);
     }
 }

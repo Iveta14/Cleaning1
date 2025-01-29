@@ -10,5 +10,10 @@
         {
             return "files" + Path.DirectorySeparatorChar + "images" + Path.DirectorySeparatorChar + "empty.jpg";
         }
+
+        public static string GetImagePathDir()
+        {
+            return "files" + Path.DirectorySeparatorChar + "images";
+        }
     }
 }

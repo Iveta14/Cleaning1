@@ -23,7 +23,7 @@ namespace Cleaning.Repositories
             IQueryable<ApplicationUser> query = _context.Set<ApplicationUser>();
             query = query.Include(s => s.UserRoles).ThenInclude(s => s.Role);
            
-            query = query.Where(s => s.UserRoles.FirstOrDefault().RoleId == role.Id).Where(b => b.IsDeleted == false);
+            query = query.Where(s => s.UserRoles.FirstOrDefault().RoleId == role.Id);
             List<ApplicationUser> result = query.ToList();
 
             return result;
@@ -52,12 +52,19 @@ namespace Cleaning.Repositories
 
         public bool Delete(ApplicationUser user)
         {
-            user.IsDeleted = true;
+            if (user == null)
+                return false;
 
-            user.LockoutEnd = DateTime.Now.AddYears(1000);
-            _context.ApplicationUsers.Update(user);
-            int stateNumber = _context.SaveChanges();
-            return stateNumber > 0;
+            try
+            {
+                _context.ApplicationUsers.Remove(user);
+                _context.Orders.Where(s => s.EmployeeId == user.Id || s.ClientId == user.Id).ExecuteDelete();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

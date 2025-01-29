@@ -72,7 +72,6 @@ namespace Cleaning.Services
         {
             ApplicationUser user = _userManager.FindByIdAsync(id).GetAwaiter().GetResult();
             _repository.Delete(user);
-          
             return true;
         }
     }

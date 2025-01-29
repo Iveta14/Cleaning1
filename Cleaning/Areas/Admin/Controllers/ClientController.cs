@@ -15,10 +15,26 @@ namespace Cleaning.Areas.Admin.Controllers
         {
             _userService = userService;
         }
+
         public IActionResult Index()
         {
             List<ApplicationUser> clientList = _userService.GetClientList();
             return View(clientList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(string id)
+        {
+            if (_userService.DeleteUser(id))
+            {
+                TempData["success"] = "Клиентът е изтрит успешно!";
+            }
+            else
+            {
+                TempData["error"] = "Клиентът не може да бъде изтрит!";
+            }
+            return RedirectToAction("Index");
         }
     }
 }

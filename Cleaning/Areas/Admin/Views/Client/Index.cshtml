@@ -20,7 +20,7 @@
                 <td>@obj.LastName</td>
                 <td>@obj.Email</td>
                 <td class="text-center">
-                    <form method="post" action="@Url.Action("Delete", "Employee")" onsubmit="return confirm('Наистина ли искате да изтриете служителя: @obj.UserName?');">
+                    <form method="post" action="@Url.Action("Delete", "CLient")" onsubmit="return confirm('Наистина ли искате да изтриете клиента: @obj.UserName?');">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="Id" value="@(obj.Id)" />
                         <button type="submit" style="border: none; color:#0d6efd; background-color: transparent;" title="Изтриване">

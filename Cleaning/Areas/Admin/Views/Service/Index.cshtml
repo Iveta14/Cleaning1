@@ -21,7 +21,7 @@
                 <td>@obj.Description</td>
                 <td>@obj.Price</td>
                 <td class="text-center">
-                    <form method="post" action="@Url.Action("Delete", "Employee")" onsubmit="return confirm('Наистина ли искате да изтриете услугата: @obj.Name?');">
+                    <form method="post" action="@Url.Action("Delete", "Service")" onsubmit="return confirm('Наистина ли искате да изтриете услугата: @obj.Name?');">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="Id" value="@(obj.Id)" />
                         <button type="submit" style="border: none; color:#0d6efd; background-color: transparent;" title="Изтриване">
