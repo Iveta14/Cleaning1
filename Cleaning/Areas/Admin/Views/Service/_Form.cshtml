@@ -9,7 +9,7 @@
             <div class="card-body">
                 <form asp-controller="Service" asp-action="@(Model.Id != null ? "Update" : "Create")" method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="Id" />
-                   
+
                     <div asp-validation-summary="All"></div>
 
                     <div class="row">

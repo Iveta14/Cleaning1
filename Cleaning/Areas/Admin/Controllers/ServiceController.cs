@@ -34,7 +34,7 @@ namespace Cleaning.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(
-            ServiceViewModel viewModel, 
+            ServiceViewModel viewModel,
             IFormFile? thumbNailImage,
             IFormFile? beforeServiceImage,
             IFormFile? afterServiceImage

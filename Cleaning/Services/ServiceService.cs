@@ -2,10 +2,7 @@
 using Cleaning.Helpers;
 using Cleaning.Repositories.IRepositories;
 using Cleaning.Services.IServices;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Cleaning.Services
 {
@@ -24,6 +21,11 @@ namespace Cleaning.Services
         public void SetModelStateDictionary(ModelStateDictionary modelState)
         {
             _modelState = modelState;
+        }
+
+        public void validate()
+        {
+
         }
 
         public List<Service> GetServiceList()
@@ -72,9 +74,9 @@ namespace Cleaning.Services
         }
 
         public bool AddService(
-            Service service, 
-            IFormFile? thumbNailImage, 
-            IFormFile? beforeServiceImage, 
+            Service service,
+            IFormFile? thumbNailImage,
+            IFormFile? beforeServiceImage,
             IFormFile? afterServiceImage
         )
         {
@@ -95,13 +97,16 @@ namespace Cleaning.Services
 
                 try
                 {
-                    if (!ValidateServiceName(service) &&
-                        !RequiredFileValidation(thumbNailImage, "Доба ви реалното съобщение!") &&
-                        !RequiredFileValidation(beforeServiceImage, "Доба ви реалното съобщение!") &&
-                        !RequiredFileValidation(afterServiceImage, "Доба ви реалното съобщение!") &&
-                        !ValidateFileExt(thumbNailImage, "Доба ви реалното съобщение!") &&
-                        !ValidateFileExt(beforeServiceImage, "Доба ви реалното съобщение!") &&
-                        !ValidateFileExt(afterServiceImage, "Доба ви реалното съобщение!"))
+                    bool validationFlag = false;
+                    validationFlag |= !ValidateServiceName(service);
+                    validationFlag |= !RequiredFileValidation(thumbNailImage, "Добави реалното съобщение!");
+                    validationFlag |= !RequiredFileValidation(beforeServiceImage, "Добави реалното съобщение!");
+                    validationFlag |= !RequiredFileValidation(afterServiceImage, "Добави реалното съобщение!");
+                    validationFlag |= !ValidateFileExt(thumbNailImage, "Добави реалното съобщение!");
+                    validationFlag |= !ValidateFileExt(beforeServiceImage, "Добави реалното съобщение!");
+                    validationFlag |= !ValidateFileExt(afterServiceImage, "Добави реалното съобщение!");
+
+                    if (validationFlag)
                         return false;
 
                     thumbNailFileName = Utils.SaveFormFile(thumbNailImage, fullPath);
@@ -110,11 +115,11 @@ namespace Cleaning.Services
 
                     beforeServiceFileName = Utils.SaveFormFile(beforeServiceImage, fullPath);
                     beforeServiceFilePath = productIamgeDirectory + Path.DirectorySeparatorChar + beforeServiceFileName;
-                    service.ThumbnailImagePath = beforeServiceFilePath;
+                    service.PhotoBeforePath = beforeServiceFilePath;
 
                     afterServiceFileName = Utils.SaveFormFile(afterServiceImage, fullPath);
                     afterServiceFilePath = productIamgeDirectory + Path.DirectorySeparatorChar + afterServiceFileName;
-                    service.ThumbnailImagePath = afterServiceFilePath;
+                    service.PhotoAfterPath = afterServiceFilePath;
 
                     if (!_repository.Add(service))
                     {

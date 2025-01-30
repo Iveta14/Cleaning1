@@ -22,7 +22,8 @@ namespace Cleaning.Repositories
             try
             {
                 _context.Services.Add(service);
-                return true;
+                int stateNumber = _context.SaveChanges();
+                return stateNumber > 0;
             }
             catch
             {
